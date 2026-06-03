@@ -15,6 +15,10 @@ steps:
       - us-central1-docker.pkg.dev/todo-gcp-498308/todo-app/backend:$SHORT_SHA
       - .
 
+  # Push image before deploy (images: field pushes after all steps — too late for gcloud run deploy)
+  - name: gcr.io/cloud-builders/docker
+    args: [push, us-central1-docker.pkg.dev/todo-gcp-498308/todo-app/backend:$SHORT_SHA]
+
   # Deploy to Cloud Run (creates service on first run)
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
@@ -29,9 +33,6 @@ steps:
       - --service-account=cloud-run-sa@todo-gcp-498308.iam.gserviceaccount.com
       - --set-secrets=SUPABASE_URL=$_SUPABASE_URL_SECRET:latest,SUPABASE_ANON_KEY=$_SUPABASE_ANON_KEY_SECRET:latest,SUPABASE_SERVICE_ROLE_KEY=$_SUPABASE_SVC_KEY_SECRET:latest,SUPABASE_JWT_SECRET=$_SUPABASE_JWT_SECRET:latest,DATABASE_URL=$_DATABASE_URL_SECRET:latest
       - --project=todo-gcp-498308
-
-images:
-  - us-central1-docker.pkg.dev/todo-gcp-498308/todo-app/backend:$SHORT_SHA
 
 options:
   logging: CLOUD_LOGGING_ONLY
