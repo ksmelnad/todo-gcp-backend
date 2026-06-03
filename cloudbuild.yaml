@@ -32,6 +32,7 @@ steps:
       - --allow-unauthenticated
       - --service-account=cloud-run-sa@todo-gcp-498308.iam.gserviceaccount.com
       - --set-secrets=SUPABASE_URL=$_SUPABASE_URL_SECRET:latest,SUPABASE_ANON_KEY=$_SUPABASE_ANON_KEY_SECRET:latest,SUPABASE_SERVICE_ROLE_KEY=$_SUPABASE_SVC_KEY_SECRET:latest,SUPABASE_JWT_SECRET=$_SUPABASE_JWT_SECRET:latest,DATABASE_URL=$_DATABASE_URL_SECRET:latest
+      - --port=8000
       - --project=todo-gcp-498308
 
 options:
