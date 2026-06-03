@@ -3,7 +3,7 @@ WORKDIR /app
 COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev
 
-FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim AS runner
+FROM python:3.13-slim AS runner
 WORKDIR /app
 COPY --from=builder /app/.venv ./.venv
 COPY main.py auth.py ./
