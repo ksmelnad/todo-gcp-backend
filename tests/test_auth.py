@@ -1,6 +1,5 @@
 import pytest
 import time
-import os
 
 def make_token(secret: str, expired: bool = False, wrong_audience: bool = False) -> str:
     from jose import jwt
@@ -48,3 +47,11 @@ async def test_protected_rejects_wrong_audience(client, monkeypatch):
         "/protected", headers={"Authorization": f"Bearer {token}"}
     )
     assert response.status_code == 401
+
+@pytest.mark.anyio
+async def test_protected_500_when_no_secret(client, monkeypatch):
+    monkeypatch.delenv("SUPABASE_JWT_SECRET", raising=False)
+    response = await client.get(
+        "/protected", headers={"Authorization": "Bearer fake.token.here"}
+    )
+    assert response.status_code == 500
